@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: alertService
+  profiles:
+    active: prod
+  config:
+    import: optional:configserver:http://miracle:1234@3.36.100.180:60010
+
+
+
