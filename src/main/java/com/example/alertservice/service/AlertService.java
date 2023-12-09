@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface AlertService {
     UserInfoDto getSlackIdByEmail(String email);
-    void sendMessageToUser(String email);
     List<LinkedHashMap<String, Object>> getPostInfo();
     List<List<ApplicantListResponseDto>> getUserInfo(long postId);
     void sendMessageToUsers();
