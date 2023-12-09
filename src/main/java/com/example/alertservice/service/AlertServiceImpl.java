@@ -50,31 +50,6 @@ public class AlertServiceImpl implements AlertService {
         return new UserInfoDto(id, realName, name);
     }
 
-    public void sendMessageToUser(String email) {
-        String url = "https://slack.com/api/chat.postMessage";
-        System.out.println(email);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
-        headers.add("Content-type", "application/json; charset=UTF-8");
-
-        UserInfoDto userInfoDto = getSlackIdByEmail(email);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("channel", userInfoDto.getId());
-        jsonObject.put("text", userInfoDto.getRealName() + "님, 반갑습니다.");
-        String body = jsonObject.toString();
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
-        RestTemplate restTemplate = new RestTemplate();
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-
-        HttpStatusCode statusCode = responseEntity.getStatusCode();
-        int status = statusCode.value();
-        String response = responseEntity.getBody();
-    }
-
-
-
     public void sendMessageToUsers() {
         List<LinkedHashMap<String, Object>> postList = getPostInfo();
 
@@ -134,7 +109,7 @@ public class AlertServiceImpl implements AlertService {
         headers.add("Session-Id", sendingKey);
         headers.add("Miracle", miracleToken);
 
-        String url = "http://localhost:60002/v1/company/posts";
+        String url = "http://13.125.211.61:60002/v1/company/posts";
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -158,7 +133,7 @@ public class AlertServiceImpl implements AlertService {
         headers.add("Session-Id", sendingKey);
         headers.add("Miracle", miracleToken);
 
-        String url = "http://localhost:60001/v1/post/"+postId+"/applicant/list";
+        String url = "http://3.36.113.249:60001/v1/post/"+postId+"/applicant/list";
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
