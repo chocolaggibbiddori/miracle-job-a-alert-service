@@ -1,7 +1,6 @@
 package com.example.alertservice.service;
 
-import com.example.alertservice.UserInfoDto;
-import com.example.alertservice.dto.response.AlertResponseDto;
+import com.example.alertservice.dto.UserInfoDto;
 import com.example.alertservice.dto.response.ApplicantListResponseDto;
 
 import java.util.LinkedHashMap;

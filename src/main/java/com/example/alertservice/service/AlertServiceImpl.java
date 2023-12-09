@@ -1,6 +1,6 @@
 package com.example.alertservice.service;
 
-import com.example.alertservice.UserInfoDto;
+import com.example.alertservice.dto.UserInfoDto;
 import com.example.alertservice.dto.response.ApplicantListResponseDto;
 import com.example.alertservice.dto.response.SuccessApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
