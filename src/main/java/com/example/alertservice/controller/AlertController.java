@@ -16,7 +16,7 @@ public class AlertController {
 
     @Scheduled(cron = "0 50 * * * ?")
     @GetMapping("/users")
-    public void test3() {
+    public void sendMessageViaSlack() {
         alertService.sendMessageToUsers();
     }
 }
