@@ -14,7 +14,7 @@ public class AlertController {
 
     private final AlertService alertService;
 
-    @Scheduled(cron = "0 0 7 * * ?")
+    @Scheduled(cron = "0 50 * * * ?")
     @GetMapping("/users")
     public void test3() {
         alertService.sendMessageToUsers();

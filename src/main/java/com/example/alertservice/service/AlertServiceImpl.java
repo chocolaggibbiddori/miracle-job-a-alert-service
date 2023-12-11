@@ -110,6 +110,7 @@ public class AlertServiceImpl implements AlertService {
         headers.add("Miracle", miracleToken);
 
         String url = "http://13.125.211.61:60002/v1/company/posts";
+        //String url = "http://localhost:60002/v1/company/posts";
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
@@ -134,6 +135,7 @@ public class AlertServiceImpl implements AlertService {
         headers.add("Miracle", miracleToken);
 
         String url = "http://3.36.113.249:60001/v1/post/"+postId+"/applicant/list";
+        //String url = "http://localhost:60001/v1/post/"+postId+"/applicant/list";
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
