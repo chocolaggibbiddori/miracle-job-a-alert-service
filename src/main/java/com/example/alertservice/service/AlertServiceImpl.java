@@ -79,7 +79,7 @@ public class AlertServiceImpl implements AlertService {
                     if (!userInfoDto.getId().equals("default")) {
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("channel", userInfoDto.getId());
-                        jsonObject.put("text", "🔔 NOTICE 🔔\n" +name + " 님, 내일 " + companyName +" 코딩 테스트가 있습니다.\n" +
+                        jsonObject.put("text", "🔔 NOTICE 🔔\n" +name + " 님, 지원하신 " + companyName +"의 코딩 테스트가 10분 뒤에 오픈 예정입니다.\n" +
                                 "잊지 말고 참여해주세요.\n\n" +
                                 "🏢 기업명 : " + companyName + "\n" +
                                 "📄 공고명 : " + postTitle + "\n" +
