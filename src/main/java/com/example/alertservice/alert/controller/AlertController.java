@@ -1,6 +1,6 @@
-package com.example.alertservice.controller;
+package com.example.alertservice.alert.controller;
 
-import com.example.alertservice.service.AlertService;
+import com.example.alertservice.alert.service.AlertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.scheduling.annotation.Scheduled;

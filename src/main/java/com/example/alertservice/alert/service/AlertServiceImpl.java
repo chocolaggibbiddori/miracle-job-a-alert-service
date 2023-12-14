@@ -1,8 +1,8 @@
-package com.example.alertservice.service;
+package com.example.alertservice.alert.service;
 
-import com.example.alertservice.dto.UserInfoDto;
-import com.example.alertservice.dto.response.ApplicantListResponseDto;
-import com.example.alertservice.dto.response.SuccessApiResponse;
+import com.example.alertservice.alert.dto.UserInfoDto;
+import com.example.alertservice.alert.dto.response.ApplicantListResponseDto;
+import com.example.alertservice.common.SuccessApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
