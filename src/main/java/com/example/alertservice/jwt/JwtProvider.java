@@ -14,6 +14,7 @@ import java.util.*;
 
 public class JwtProvider {
 
+    public static final String SUB_GATEWAY = "gateway";
     public static final String AUD_GATEWAY = "https://job-a.shop";
     private static final String ISSUER = "http://13.125.220.223:60200";
 
@@ -76,10 +77,13 @@ public class JwtProvider {
                 Claims claims = getClaims(token);
                 boolean validDefault = validateDefault(claims);
 
+                String sub = claims.getSubject();
+                boolean validSub = SUB_GATEWAY.equals(sub);
+
                 String aud = claims.getAudience();
                 boolean validAud = AUD_GATEWAY.equals(aud);
 
-                return validDefault && validAud;
+                return validDefault && validSub && validAud;
             }
 
             return validateToken(token);

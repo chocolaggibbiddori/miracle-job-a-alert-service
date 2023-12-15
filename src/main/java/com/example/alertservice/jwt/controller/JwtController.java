@@ -3,9 +3,9 @@ package com.example.alertservice.jwt.controller;
 import com.example.alertservice.common.CommonApiResponse;
 import com.example.alertservice.common.ErrorApiResponse;
 import com.example.alertservice.jwt.JwtProvider;
-import com.example.alertservice.jwt.service.JwtService;
 import com.example.alertservice.jwt.domain.AccessToken;
 import com.example.alertservice.jwt.domain.dto.CreateTokenRequestDto;
+import com.example.alertservice.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,15 +33,16 @@ public class JwtController {
 
         AccessToken token;
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", id);
-
-        if (COMPANY.equals(memberType)) {
-            Objects.requireNonNull(bno, "Require bno");
-            claims.put("bno", bno);
-        }
 
         if (dto.isGateway()) {
+            claims.put("sub", JwtProvider.SUB_GATEWAY);
             claims.put("aud", JwtProvider.AUD_GATEWAY);
+        } else {
+            if (COMPANY.equals(memberType)) {
+                Objects.requireNonNull(bno, "Require bno");
+                claims.put("bno", bno);
+            }
+            claims.put("id", id);
         }
 
         token = jwtService.createToken(memberType, email, claims);
