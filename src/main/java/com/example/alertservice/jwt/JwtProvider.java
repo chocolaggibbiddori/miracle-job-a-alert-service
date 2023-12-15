@@ -71,8 +71,8 @@ public class JwtProvider {
     }
 
     public boolean validateToken(String token, boolean gatewayToken) {
-        if (gatewayToken) {
-            try {
+        try {
+            if (gatewayToken) {
                 Claims claims = getClaims(token);
                 boolean validDefault = validateDefault(claims);
 
@@ -80,18 +80,9 @@ public class JwtProvider {
                 boolean validAud = AUD_GATEWAY.equals(aud);
 
                 return validDefault && validAud;
-            } catch (Exception e) {
-                return false;
             }
-        }
 
-        return validateToken(token);
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Claims claims = getClaims(token);
-            return validateDefault(claims);
+            return validateToken(token);
         } catch (Exception e) {
             return false;
         }
@@ -103,6 +94,11 @@ public class JwtProvider {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    private boolean validateToken(String token) {
+        Claims claims = getClaims(token);
+        return validateDefault(claims);
     }
 
     private boolean validateDefault(Claims claims) {
