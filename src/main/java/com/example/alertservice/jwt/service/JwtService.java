@@ -30,6 +30,12 @@ public class JwtService {
         return new AccessToken(accessToken);
     }
 
+    public AccessToken createTokenGateway(Map<String, Object> claims) {
+        Object subject = claims.get("sub");
+        String accessToken = jwtProvider.createAccessToken(subject.toString(), claims);
+        return new AccessToken(accessToken);
+    }
+
     public boolean validateToken(String token, boolean gatewayToken) {
         return jwtProvider.validateToken(token, gatewayToken);
     }

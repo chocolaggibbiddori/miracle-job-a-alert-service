@@ -34,18 +34,20 @@ public class JwtController {
         AccessToken token;
         Map<String, Object> claims = new HashMap<>();
 
-        if (dto.isGateway()) {
+        boolean gateway = dto.isGateway();
+        if (gateway) {
             claims.put("sub", JwtProvider.SUB_GATEWAY);
             claims.put("aud", JwtProvider.AUD_GATEWAY);
+            token = jwtService.createTokenGateway(claims);
         } else {
             if (COMPANY.equals(memberType)) {
                 Objects.requireNonNull(bno, "Require bno");
                 claims.put("bno", bno);
             }
             claims.put("id", id);
+            token = jwtService.createToken(memberType, email, claims);
         }
 
-        token = jwtService.createToken(memberType, email, claims);
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
