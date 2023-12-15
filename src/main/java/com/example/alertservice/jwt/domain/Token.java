@@ -1,13 +1,17 @@
 package com.example.alertservice.jwt.domain;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-abstract class Token {
+@Data
+public abstract class Token {
 
     private final String token;
 
-    Token(String token) {
+    public Token() {
+        this.token = null;
+    }
+
+    public Token(String token) {
         this.token = token;
     }
 }
