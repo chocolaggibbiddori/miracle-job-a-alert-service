@@ -65,7 +65,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(subject)
-                .setIssuer("Alert-Service")
+                .setIssuer("http://13.125.220.223:60200")
                 .signWith(key, SignatureAlgorithm.HS512)
                 .addClaims(claims);
     }
