@@ -30,8 +30,8 @@ public class JwtService {
         return new AccessToken(accessToken);
     }
 
-    public boolean validateToken(String token) {
-        return jwtProvider.validateToken(token);
+    public boolean validateToken(String token, boolean gatewayToken) {
+        return jwtProvider.validateToken(token, gatewayToken);
     }
 
     public AccessToken refreshToken(String refreshToken, String subject, Map<String, Object> claims) {

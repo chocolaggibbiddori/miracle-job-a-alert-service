@@ -14,6 +14,7 @@ import java.util.*;
 
 public class JwtProvider {
 
+    public static final String AUD_GATEWAY = "https://job-a.shop";
     private static final String ISSUER = "http://13.125.220.223:60200";
 
     private final Key key;
@@ -69,25 +70,50 @@ public class JwtProvider {
                 .addClaims(claims);
     }
 
+    public boolean validateToken(String token, boolean gatewayToken) {
+        if (gatewayToken) {
+            try {
+                Claims claims = getClaims(token);
+                boolean validDefault = validateDefault(claims);
+
+                String aud = claims.getAudience();
+                boolean validAud = AUD_GATEWAY.equals(aud);
+
+                return validDefault && validAud;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        return validateToken(token);
+    }
+
     public boolean validateToken(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String issuer = claims.getIssuer();
-            boolean validIss = Objects.equals(issuer, ISSUER);
-
-            Date expirationDate = claims.getExpiration();
-            Date now = new Date();
-            boolean notExpired = now.before(expirationDate);
-
-            return validIss && notExpired;
+            Claims claims = getClaims(token);
+            return validateDefault(claims);
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    private boolean validateDefault(Claims claims) {
+        String issuer = claims.getIssuer();
+        boolean validIss = Objects.equals(issuer, ISSUER);
+
+        Date expirationDate = claims.getExpiration();
+        Date now = new Date();
+        boolean notExpired = now.before(expirationDate);
+
+        return validIss && notExpired;
     }
 
     public String refreshAccessToken(String refreshToken, String subject, Map<String, Object> claims) {

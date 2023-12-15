@@ -2,6 +2,7 @@ package com.example.alertservice.jwt.controller;
 
 import com.example.alertservice.common.CommonApiResponse;
 import com.example.alertservice.common.ErrorApiResponse;
+import com.example.alertservice.jwt.JwtProvider;
 import com.example.alertservice.jwt.service.JwtService;
 import com.example.alertservice.jwt.domain.AccessToken;
 import com.example.alertservice.jwt.domain.dto.CreateTokenRequestDto;
@@ -37,6 +38,10 @@ public class JwtController {
             claims.put("bno", bno);
         }
 
+        if (dto.isGateway()) {
+            claims.put("aud", JwtProvider.AUD_GATEWAY);
+        }
+
         token = jwtService.createToken(memberType, email, claims);
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
@@ -44,7 +49,14 @@ public class JwtController {
     @PostMapping("/validate")
     public ResponseEntity<Boolean> validateToken(@RequestBody AccessToken accessToken) {
         String token = accessToken.getToken();
-        Boolean valid = jwtService.validateToken(token);
+        Boolean valid = jwtService.validateToken(token, false);
+        return ResponseEntity.ok(valid);
+    }
+
+    @PostMapping("/validate-gateway")
+    public ResponseEntity<Boolean> validateGatewayToken(@RequestBody AccessToken accessToken) {
+        String token = accessToken.getToken();
+        Boolean valid = jwtService.validateToken(token, true);
         return ResponseEntity.ok(valid);
     }
 
