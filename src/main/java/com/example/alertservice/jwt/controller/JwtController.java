@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @RequestMapping("/v1/jwt")
@@ -35,6 +36,7 @@ public class JwtController {
         claims.put("id", id);
 
         if (COMPANY.equals(memberType)) {
+            Objects.requireNonNull(bno, "Require bno");
             claims.put("bno", bno);
         }
 
