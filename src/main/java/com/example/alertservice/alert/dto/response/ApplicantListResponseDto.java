@@ -1,4 +1,4 @@
-package com.example.alertservice.dto.response;
+package com.example.alertservice.alert.dto.response;
 
 import lombok.Data;
 
