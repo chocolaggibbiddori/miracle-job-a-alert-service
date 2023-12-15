@@ -10,12 +10,11 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class JwtProvider {
+
+    private static final String ISSUER = "http://13.125.220.223:60200";
 
     private final Key key;
     private final long accessTokenValidityInSeconds;
@@ -65,7 +64,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(subject)
-                .setIssuer("http://13.125.220.223:60200")
+                .setIssuer(ISSUER)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .addClaims(claims);
     }
@@ -78,10 +77,14 @@ public class JwtProvider {
                     .parseClaimsJws(token)
                     .getBody();
 
+            String issuer = claims.getIssuer();
+            boolean validIss = Objects.equals(issuer, ISSUER);
+
             Date expirationDate = claims.getExpiration();
             Date now = new Date();
+            boolean notExpired = now.before(expirationDate);
 
-            return now.before(expirationDate);
+            return validIss && notExpired;
         } catch (Exception e) {
             return false;
         }
