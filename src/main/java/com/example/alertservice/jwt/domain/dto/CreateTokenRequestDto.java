@@ -9,13 +9,11 @@ public class CreateTokenRequestDto {
     private final String email;
     private final String memberType;
     private final String bno;
-    private final String token;
 
     public CreateTokenRequestDto() {
         this.id = null;
         this.email = null;
         this.memberType = null;
         this.bno = null;
-        this.token = null;
     }
 }
