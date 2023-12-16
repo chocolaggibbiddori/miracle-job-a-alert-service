@@ -70,6 +70,12 @@ public class JwtController {
         return ResponseEntity.ok(valid);
     }
 
+    @GetMapping("/parse")
+    public ResponseEntity<Map<String, String>> parseToken(@RequestParam String token) {
+        Map<String, String> result = jwtService.parse(token);
+        return ResponseEntity.ok(result);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NullPointerException.class)
     public CommonApiResponse nullPointer(NullPointerException e) {

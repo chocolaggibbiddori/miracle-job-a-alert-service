@@ -40,6 +40,10 @@ public class JwtService {
         return jwtProvider.validateToken(token, gatewayToken);
     }
 
+    public Map<String, String> parse(String token) {
+        return jwtProvider.parse(token);
+    }
+
     public AccessToken refreshToken(String refreshToken, String subject, Map<String, Object> claims) {
         String refreshedAccessToken = jwtProvider.refreshAccessToken(refreshToken, subject, claims);
         return new AccessToken(refreshedAccessToken);
