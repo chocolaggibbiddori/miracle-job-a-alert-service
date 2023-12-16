@@ -9,6 +9,7 @@ public class CreateTokenRequestDto {
     private final String email;
     private final String memberType;
     private final String bno;
+    private final String name;
     private final boolean gateway;
 
     public CreateTokenRequestDto() {
@@ -16,6 +17,7 @@ public class CreateTokenRequestDto {
         this.email = null;
         this.memberType = null;
         this.bno = null;
+        this.name = null;
         this.gateway = false;
     }
 }
