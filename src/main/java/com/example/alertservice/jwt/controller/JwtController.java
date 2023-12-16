@@ -20,6 +20,7 @@ import java.util.Objects;
 @RestController
 public class JwtController {
 
+    private static final String USER = "user";
     private static final String COMPANY = "company";
 
     private final JwtService jwtService;
@@ -30,6 +31,7 @@ public class JwtController {
         String memberType = dto.getMemberType();
         String email = dto.getEmail();
         String bno = dto.getBno();
+        String name = dto.getName();
 
         AccessToken token;
         Map<String, Object> claims = new HashMap<>();
@@ -43,6 +45,9 @@ public class JwtController {
             if (COMPANY.equals(memberType)) {
                 Objects.requireNonNull(bno, "Require bno");
                 claims.put("bno", bno);
+            } else if (USER.equals(memberType)) {
+                Objects.requireNonNull(name, "Require name");
+                claims.put("name", name);
             }
             claims.put("id", id);
             token = jwtService.createToken(memberType, email, claims);
