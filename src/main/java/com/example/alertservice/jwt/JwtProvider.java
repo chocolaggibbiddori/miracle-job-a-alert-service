@@ -137,7 +137,7 @@ public class JwtProvider {
         map.put("iss", claims.getIssuer());
         map.put("iat", claims.getIssuedAt().toString());
         map.put("exp", claims.getExpiration().toString());
-        map.put("id", claims.get("id", String.class));
+        map.put("id", claims.get("id", Integer.class).toString());
         map.put("bno", claims.get("bno", String.class));
         map.put("name", claims.get("name", String.class));
 
