@@ -1,10 +1,7 @@
 package com.example.alertservice.jwt;
 
 import com.example.alertservice.jwt.exception.InvalidTokenException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
@@ -126,5 +123,24 @@ public class JwtProvider {
 
     private String extractSubject(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public Map<String, String> parse(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("sub", claims.getSubject());
+        map.put("iss", claims.getIssuer());
+        map.put("iat", claims.getIssuedAt().toString());
+        map.put("exp", claims.getExpiration().toString());
+        map.put("id", claims.get("id", String.class));
+        map.put("bno", claims.get("bno", String.class));
+        map.put("name", claims.get("name", String.class));
+
+        return map;
     }
 }
