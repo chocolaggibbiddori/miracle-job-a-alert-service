@@ -3,7 +3,11 @@ package com.example.alertservice.alert.service;
 import com.example.alertservice.alert.dto.UserInfoDto;
 import com.example.alertservice.alert.dto.response.ApplicantListResponseDto;
 import com.example.alertservice.common.SuccessApiResponse;
+import com.example.alertservice.jwt.JwtProvider;
+import com.example.alertservice.jwt.domain.AccessToken;
+import com.example.alertservice.jwt.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -12,8 +16,12 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+@RequiredArgsConstructor
 @Service
 public class AlertServiceImpl implements AlertService {
+
+    private final JwtService jwtService;
+    private final Token headerToken;
 
     @Value("${slack.app.token}")
     private String token;
@@ -115,12 +123,15 @@ public class AlertServiceImpl implements AlertService {
      *  현재 시간(KST)을 기준으로 10분 뒤 코딩테스트가 진행예정인 공고 정보를 받아옵니다.
      */
     public List<LinkedHashMap<String, Object>> getPostInfo() {
+        refreshHeaderToken();
+
         String sendingKey = UUID.randomUUID().toString();
         HttpHeaders headers = new HttpHeaders();
         String miracle = sendingKey + privateKey;
         String miracleToken = String.valueOf(miracle.hashCode());
         headers.add("Session-Id", sendingKey);
         headers.add("Miracle", miracleToken);
+        headers.add("Authorization", "Bearer " + headerToken.getToken());
 
         String url = "http://13.125.211.61:60002/v1/company/posts";
         //String url = "http://localhost:60002/v1/company/posts";
@@ -138,17 +149,19 @@ public class AlertServiceImpl implements AlertService {
         return data;
     }
 
-
     /**
      * postId를 통해 해당 공고에 지원한 지원자 리스트를 받아옵니다.
      */
     public List<List<ApplicantListResponseDto>> getUserInfo(long postId) {
+        refreshHeaderToken();
+
         String sendingKey = UUID.randomUUID().toString();
         HttpHeaders headers = new HttpHeaders();
         String miracle = sendingKey + privateKey;
         String miracleToken = String.valueOf(miracle.hashCode());
         headers.add("Session-Id", sendingKey);
         headers.add("Miracle", miracleToken);
+        headers.add("Authorization", "Bearer " + headerToken.getToken());
 
         String url = "http://3.36.113.249:60001/v1/post/"+postId+"/applicant/list";
         //String url = "http://localhost:60001/v1/post/"+postId+"/applicant/list";
@@ -164,6 +177,13 @@ public class AlertServiceImpl implements AlertService {
         );
         List<List<LinkedHashMap<String, Object>>> data = (List<List<LinkedHashMap<String, Object>>>) responseEntity.getBody().getData();
         return transformResponse(data);
+    }
+
+    private void refreshHeaderToken() {
+        if (!jwtService.validateToken(headerToken.getToken(), true)) {
+            AccessToken gatewayToken = jwtService.createTokenGateway(Map.of("sub", JwtProvider.SUB_GATEWAY, "aud", JwtProvider.AUD_GATEWAY));
+            headerToken.setToken(gatewayToken.getToken());
+        }
     }
 
     /**
