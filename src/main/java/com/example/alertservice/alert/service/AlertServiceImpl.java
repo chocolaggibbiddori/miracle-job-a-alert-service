@@ -21,6 +21,10 @@ public class AlertServiceImpl implements AlertService {
     @Value("${miracle.privateKey}")
     private String privateKey;
 
+    /**
+     * @param email
+     * 이메일을 받아서 슬랙에서 정보를 받아옵니다.
+     */
     public UserInfoDto getSlackIdByEmail(String email) {
         String url = "https://slack.com/api/users.lookupByEmail";
         url += "?email=" + email;
@@ -50,6 +54,10 @@ public class AlertServiceImpl implements AlertService {
         return new UserInfoDto(id, realName, name);
     }
 
+    /**
+     * 알림 서비스의 메인 서비스
+     * 공고 정보와 해당 공고에 지원한 지원자 정보를 받아와서 슬랙 알림을 보냅니다.
+     */
     public void sendMessageToUsers() {
         List<LinkedHashMap<String, Object>> postList = getPostInfo();
 
@@ -74,6 +82,10 @@ public class AlertServiceImpl implements AlertService {
                 innerList.iterator().forEachRemaining((ApplicantListResponseDto dto) -> {
                     String name = dto.getName();
                     String email = dto.getEmail();
+                    if (email.contains("google#")) {
+                        String[] split = email.split("#");
+                        email = split[0];
+                    }
 
                     UserInfoDto userInfoDto = getSlackIdByEmail(email);
                     if (!userInfoDto.getId().equals("default")) {
@@ -99,8 +111,9 @@ public class AlertServiceImpl implements AlertService {
     }
 
 
-
-
+    /**
+     *  현재 시간(KST)을 기준으로 10분 뒤 코딩테스트가 진행예정인 공고 정보를 받아옵니다.
+     */
     public List<LinkedHashMap<String, Object>> getPostInfo() {
         String sendingKey = UUID.randomUUID().toString();
         HttpHeaders headers = new HttpHeaders();
@@ -126,6 +139,9 @@ public class AlertServiceImpl implements AlertService {
     }
 
 
+    /**
+     * postId를 통해 해당 공고에 지원한 지원자 리스트를 받아옵니다.
+     */
     public List<List<ApplicantListResponseDto>> getUserInfo(long postId) {
         String sendingKey = UUID.randomUUID().toString();
         HttpHeaders headers = new HttpHeaders();
@@ -150,6 +166,9 @@ public class AlertServiceImpl implements AlertService {
         return transformResponse(data);
     }
 
+    /**
+     * 지원자 리스트를 DTO로 매칭하여 반환합니다.
+     */
     public List<List<ApplicantListResponseDto>> transformResponse(List<List<LinkedHashMap<String, Object>>> data) {
         // 변환 로직을 작성합니다.
         // 예를 들어, 각 Map을 YourDto로 변환하는 작업을 수행합니다.
@@ -172,6 +191,9 @@ public class AlertServiceImpl implements AlertService {
     }
 
 
+    /**
+     * LinkedHashMap을 DTO 매핑
+     */
     public ApplicantListResponseDto mapToYourDto(LinkedHashMap<String, Object> map) {
         // Map을 YourDto로 변환하는 로직을 작성합니다.
         // 예를 들어, ObjectMapper를 사용하여 매핑할 수 있습니다.
